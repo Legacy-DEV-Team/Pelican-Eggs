@@ -2,13 +2,13 @@
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PLCN_v1",
-        "update_url": "https://raw.githubusercontent.com/LegacyAngel2K9/Pelican-Eggs/refs/heads/main/Eggs/egg-custom-a-i.json"
+        "update_url": "https:\/\/raw.githubusercontent.com\/LegacyAngel2K9\/Pelican-Eggs\/refs\/heads\/main\/Eggs\/egg-custom-a-i.json"
     },
-    "exported_at": "2025-02-10T00:27:05+00:00",
+    "exported_at": "2025-02-10T01:07:49+00:00",
     "name": "CustomAI",
     "author": "ldt@legacyh.dev",
     "uuid": "80ffd1ec-85a2-4454-bc27-96390610a8fb",
-    "description": "A self-hosted AI assistant with WebSockets, running on https://ai.core-x.dev and wss://aiip.core-x.dev",
+    "description": "A self-hosted AI assistant with WebSockets, running on https:\/\/ai.core-x.dev and wss:\/\/aiip.core-x.dev",
     "features": [
         "AI Chat Interface (HTTPS)",
         "WebSocket AI Chat (WSS)",
@@ -16,15 +16,8 @@
         "Systemd Auto-Start",
         "Runs Directly on Port 443"
     ],
-    "tags": [
-        "AI",
-        "WebSockets",
-        "Flask",
-        "Cloudflare SSL",
-        "Machine Learning"
-    ],
     "docker_images": {
-        "Debian": "ghcr.io/parkervcp/yolks:debian"
+        "Debian": "ghcr.io\/parkervcp\/yolks:debian"
     },
     "file_denylist": [],
     "startup": "systemctl start ai_auth.service",
@@ -36,29 +29,39 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!/bin/ash\r\n# \r\n# .____     ___________________\r\n# |    |    \\______ \\__    ___\/\r\n# |    |     |    |  \\|    |   \r\n# |    |___  |    `   \\    |   \r\n# |_______ \\\/_______  \/____|   \r\n#         \\\/        \\\/         \r\n# \r\n# Website: https://legacyh.dev\r\n# Discord: https://discord.legacyh.dev\r\n# Issues:  https://github.com/LegacyAngel2K9/Pelican-Eggs/issues\r\n# \r\n\r\napt update && apt install -y python3 python3-venv python3-pip sqlite3 curl git\r\npython3 -m venv ~/ai_env\r\nsource ~/ai_env/bin/activate\r\npip install flask flask_sqlalchemy flask_socketio eventlet torch transformers\r\nmkdir -p /home/container/ai_assistant\r\ncd /home/container/ai_assistant\r\nwget -O aistart.py \"https://yourserver.com/aistart.py\"\r\nwget -O index.html \"https://yourserver.com/index.html\"\r\nsystemctl daemon-reload\r\nsystemctl enable ai_auth.service\r\nsystemctl start ai_auth.service",
-            "container": "ghcr.io/pelican-eggs/installers:debian",
+            "script": "#!\/bin\/ash\r\n# \r\n# .____     ___________________\r\n# |    |    \\______ \\__    ___\/\r\n# |    |     |    |  \\|    |   \r\n# |    |___  |    `   \\    |   \r\n# |_______ \\\/_______  \/____|   \r\n#         \\\/        \\\/         \r\n# \r\n# Website: https:\/\/legacyh.dev\r\n# Discord: https:\/\/discord.legacyh.dev\r\n# Issues:  https:\/\/github.com\/LegacyAngel2K9\/Pelican-Eggs\/issues\r\n# \r\n\r\napt update && apt install -y python3 python3-venv python3-pip sqlite3 curl git\r\npython3 -m venv ~\/ai_env\r\nsource ~\/ai_env\/bin\/activate\r\npip install flask flask_sqlalchemy flask_socketio eventlet torch transformers\r\nmkdir -p \/home\/container\/ai_assistant\r\ncd \/home\/container\/ai_assistant\r\nwget -O aistart.py \"https:\/\/raw.githubusercontent.com\/LegacyAngel2K9\/Pelican-Eggs\/refs\/heads\/main\/Custom%20Files\/egg-custom-a-i\/aistart.py\"\r\nwget -O index.html \"https:\/\/raw.githubusercontent.com\/LegacyAngel2K9\/Pelican-Eggs\/refs\/heads\/main\/Custom%20Files\/egg-custom-a-i\/index.html\"\r\nsystemctl daemon-reload\r\nsystemctl enable ai_auth.service\r\nsystemctl start ai_auth.service",
+            "container": "ghcr.io\/pelican-eggs\/installers:debian",
             "entrypoint": "2"
         }
     },
     "variables": [
         {
+            "sort": 1,
             "name": "AI Chat URL",
             "description": "URL where the AI chat interface is hosted",
             "env_variable": "AI_CHAT_URL",
-            "default_value": "https://ai.core-x.dev",
+            "default_value": "https:\/\/ai.core-x.dev",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:255"
+            "rules": [
+                "required",
+                "string",
+                "max:255"
+            ]
         },
         {
+            "sort": 2,
             "name": "AI WebSockets URL",
             "description": "WebSocket URL for real-time AI chat",
             "env_variable": "AI_WSS_URL",
-            "default_value": "wss://aiip.core-x.dev",
+            "default_value": "wss:\/\/aiip.core-x.dev",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:255"
+            "rules": [
+                "required",
+                "string",
+                "max:255"
+            ]
         }
     ]
 }
