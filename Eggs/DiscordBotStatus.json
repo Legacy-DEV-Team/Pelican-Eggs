@@ -83,32 +83,6 @@
         },
         {
             "sort": 5,
-            "name": "Git Username",
-            "description": "Username to auth with git.",
-            "env_variable": "USERNAME",
-            "default_value": "LegacyAngel2K9",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": [
-                "nullable",
-                "string"
-            ]
-        },
-        {
-            "sort": 6,
-            "name": "Git Access Token",
-            "description": "Password to use with git.\n\nIt's best practice to use a Personal Access Token.\nhttps://github.com/settings/tokens\nhttps://gitlab.com/-/profile/personal_access_tokens",
-            "env_variable": "ACCESS_TOKEN",
-            "default_value": "",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": [
-                "nullable",
-                "string"
-            ]
-        },
-        {
-            "sort": 7,
             "name": "Main file",
             "description": "The file that starts the app.\nCan be .js and .ts",
             "env_variable": "MAIN_FILE",
