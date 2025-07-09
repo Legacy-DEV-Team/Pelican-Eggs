@@ -1,0 +1,116 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PELICAN PANEL",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-07-09T00:00:00Z",
+    "name": "IceCast 2 (ARM64)",
+    "author": "legacyangel2k9@icloud.com",
+    "description": "Icecast is a streaming media server that supports Ogg, Opus, WebM and MP3. Ideal for running internet radio or personal audio streaming.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup": "./icecast2 -c icecast.xml",
+    "config": {
+        "files": "{}",
+        "startup": {
+            "done": "icecast2"
+        },
+        "logs": {
+            "custom": false
+        },
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/ash\n# IceCast 2 Installer for Pelican\n\napk update\napk add curl binutils tar xz\n\nmkdir -p /mnt/server/tmp\ncd /mnt/server/tmp\n\nDOWNLOAD_URL=\"https://download.opensuse.org/repositories/multimedia:/xiph/Debian_10/amd64/icecast2_${VERSION}_amd64.deb\"\n\nif [ -n \"$DOWNLOAD_URL\" ]; then\n  if curl --output /dev/null --silent --head --fail \"$DOWNLOAD_URL\"; then\n    echo \"Download link is valid: $DOWNLOAD_URL\"\n  else\n    echo \"Invalid download link. Exiting.\"\n    exit 1\n  fi\nfi\n\ncurl -sSL -o icecast2.deb \"$DOWNLOAD_URL\"\nar xv icecast2.deb\nrm -rf icecast2.deb control.tar.xz debian-binary\ntar xvf data.tar.xz\nrm -rf data.tar.xz\n\nmv usr/bin/icecast2 /mnt/server\nmv etc/icecast2/* /mnt/server\ncd /mnt/server\nmkdir -p log/\nrm -rf tmp/ icecast.xml\n\ncurl -sSL -o icecast.xml https://pteropaste.com/7vqi8k\n\necho \"IceCast 2 installation completed.\"",
+            "container": "ghcr.io/pterodactyl/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Version",
+            "description": "Example: 2.4.4-1",
+            "env_variable": "VERSION",
+            "default_value": "2.4.4-1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Admin Username",
+            "description": "Icecast Admin Username",
+            "env_variable": "ADMIN_USERNAME",
+            "default_value": "admin",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:32",
+            "field_type": "text"
+        },
+        {
+            "name": "Admin Password",
+            "description": "Icecast Admin Password",
+            "env_variable": "ADMIN_PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|min:8|max:32",
+            "field_type": "text"
+        },
+        {
+            "name": "Source Password",
+            "description": "Used by Source Clients to connect and stream",
+            "env_variable": "SOURCE_PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|min:10|max:32",
+            "field_type": "text"
+        },
+        {
+            "name": "Relay Password",
+            "description": "Used for stream relays",
+            "env_variable": "RELAY_PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|min:10|max:32",
+            "field_type": "text"
+        },
+        {
+            "name": "Admin Email",
+            "description": "Contact Email",
+            "env_variable": "ADMIN_EMAIL",
+            "default_value": "icemaster@localhost",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:64",
+            "field_type": "text"
+        },
+        {
+            "name": "Location",
+            "description": "Display location",
+            "env_variable": "LOCATION",
+            "default_value": "Earth",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:16",
+            "field_type": "text"
+        },
+        {
+            "name": "Hostname",
+            "description": "Public stream hostname or IP",
+            "env_variable": "HOSTNAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:32",
+            "field_type": "text"
+        }
+    ]
+}

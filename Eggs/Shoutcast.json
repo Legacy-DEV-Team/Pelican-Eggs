@@ -1,0 +1,35 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PELICAN PANEL",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-07-09T00:00:00Z",
+    "name": "Shoutcast Server (x64)",
+    "author": "legacyangel2k9@icloud.com",
+    "description": "Shoutcast server for broadcasting media streams. Easy to deploy and use for online radio stations using Pelican Panel.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup": "./sc_serv sc_serv_simple.conf",
+    "config": {
+        "files": "{}",
+        "startup": {
+            "done": "*********************************************************************"
+        },
+        "logs": {
+            "custom": false
+        },
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/ash\n# Shoutcast Installer for Pelican\n\napk update\napk add wget curl unzip zip tar\n\ncd /mnt/server\nmkdir -p sc\n\n# Download latest Shoutcast release\necho \"Downloading Shoutcast server...\"\nwget \"http://download.nullsoft.com/shoutcast/tools/sc_serv2_linux_x64-latest.tar.gz\"\n\n# Extract files\necho \"Extracting Shoutcast archive...\"\ntar -xzf sc_serv2_linux_x64-latest.tar.gz\n\n# Download config file\nwget \"https://raw.githubusercontent.com/Rezanans-wow/Shoutcast-server-egg/main/shoutcast_files/sc_serv_simple.conf\"\n\n# Cleanup\nrm sc_serv2_linux_x64-latest.tar.gz\n\necho \"Shoutcast installation complete.\"",
+            "container": "ghcr.io/pterodactyl/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": []
+}
