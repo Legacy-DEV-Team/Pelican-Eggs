@@ -26,7 +26,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!/bin/ash\n# Shoutcast Installer for Pelican\n\napk update\napk add wget curl unzip zip tar\n\ncd /mnt/server\nmkdir -p sc\n\n# Download latest Shoutcast release\necho \"Downloading Shoutcast server...\"\nwget \"http://download.nullsoft.com/shoutcast/tools/sc_serv2_linux_x64-latest.tar.gz\"\n\n# Extract files\necho \"Extracting Shoutcast archive...\"\ntar -xzf sc_serv2_linux_x64-latest.tar.gz\n\n# Download config file\nwget \"https://raw.githubusercontent.com/Rezanans-wow/Shoutcast-server-egg/main/shoutcast_files/sc_serv_simple.conf\"\n\n# Cleanup\nrm sc_serv2_linux_x64-latest.tar.gz\n\necho \"Shoutcast installation complete.\"",
+            "script": "#!/bin/ash\n# Shoutcast Installer for Pelican\n\napk update\napk add wget curl unzip zip tar\n\ncd /mnt/server\nmkdir -p sc\n\n# Download latest Shoutcast release\necho \"Downloading Shoutcast server...\"\nwget \"http://download.nullsoft.com/shoutcast/tools/sc_serv2_linux_x64-latest.tar.gz\"\n\n# Extract files\necho \"Extracting Shoutcast archive...\"\ntar -xzf sc_serv2_linux_x64-latest.tar.gz\n\n# Download config file\nwget \"https://raw.githubusercontent.com/Legacy-DEV-Team/Pelican-Eggs/main/ServerFiles/shoutcast/sc_serv_simple.conf\"\n\n# Cleanup\nrm sc_serv2_linux_x64-latest.tar.gz\n\necho \"Shoutcast installation complete.\"",
             "container": "ghcr.io/pterodactyl/installers:alpine",
             "entrypoint": "ash"
         }
