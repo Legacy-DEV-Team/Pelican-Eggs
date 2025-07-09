@@ -2,54 +2,40 @@
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PLCN_v1",
-        "update_url": "https:\/\/raw.githubusercontent.com\/Legacy-DEV-Team\/Pelican-Eggs\/refs\/heads\/main\/Eggs\/IceCast.json"
+        "update_url": "https:\/\/raw.githubusercontent.com\/Legacy-DEV-Team\/Pelican-Eggs\/refs\/heads\/main\/Eggs\/Shoutcast.json"
     },
-    "exported_at": "2025-07-09T08:32:52+00:00",
-    "name": "IceCast 2",
+    "exported_at": "2025-07-09T08:56:43+00:00",
+    "name": "ShoutCast",
     "author": "ldt@legacyh.dev",
-    "uuid": "d26182e4-2476-411c-891f-0866bfb11a4f",
-    "description": "Icecast is a streaming media server that supports Ogg, Opus, WebM and MP3. Ideal for running internet radio or personal audio streaming.",
+    "uuid": "dd2b7e7c-550b-4490-87d9-cdd679a39273",
+    "description": "Shoutcast server for broadcasting media streams. Easy to deploy and use for online radio stations using Pelican Panel.",
     "tags": [],
     "features": [],
     "docker_images": {
         "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/yolks:debian"
     },
     "file_denylist": [],
-    "startup": ".\/icecast2 -c icecast.xml",
+    "startup": ".\/sc_serv sc_serv_simple.conf",
     "config": {
-        "files": "{\n}",
-        "startup": "{\n            \"done\": \"icecast2\"\n}",
+        "files": "{}",
+        "startup": "{\n            \"done\": \"*********************************************************************\"\n}",
         "logs": "{\n            \"custom\": false\n}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n# IceCast 2 Installer for Pelican\r\n\r\necho \"[*] Updating packages and installing dependencies...\"\r\napk update\r\napk add --no-cache curl binutils tar xz\r\n\r\necho \"[*] Preparing temporary workspace...\"\r\nmkdir -p \/mnt\/server\/tmp\r\ncd \/mnt\/server\/tmp\r\n\r\n# Define download URL based on user-supplied version\r\nDOWNLOAD_URL=\"https:\/\/download.opensuse.org\/repositories\/multimedia:\/xiph\/Debian_10\/amd64\/icecast2_${VERSION}_amd64.deb\"\r\n\r\necho \"[*] Checking if download link is valid...\"\r\nif [ -n \"$DOWNLOAD_URL\" ]; then\r\n    if curl --output \/dev\/null --silent --head --fail \"$DOWNLOAD_URL\"; then\r\n        echo \"[\u2713] Download link is valid: $DOWNLOAD_URL\"\r\n    else\r\n        echo \"[\u2717] Invalid download link. Exiting.\"\r\n        exit 1\r\n    fi\r\nfi\r\n\r\necho \"[*] Downloading IceCast 2 .deb package...\"\r\ncurl -sSL -o icecast2.deb \"$DOWNLOAD_URL\"\r\n\r\necho \"[*] Extracting package contents...\"\r\nar xv icecast2.deb\r\nrm -f icecast2.deb control.tar.xz debian-binary\r\ntar xvf data.tar.xz\r\nrm -f data.tar.xz\r\n\r\necho \"[*] Moving server files to \/mnt\/server...\"\r\nmv usr\/bin\/icecast2 \/mnt\/server\r\nmv etc\/icecast2\/* \/mnt\/server\r\n\r\ncd \/mnt\/server\r\nmkdir -p log\/\r\nrm -rf tmp\/ icecast.xml\r\n\r\necho \"[*] Downloading default configuration file...\"\r\ncurl -sSL -o icecast.xml https:\/\/gitlab.xiph.org\/xiph\/icecast-server\/-\/raw\/master\/conf\/icecast_minimal.xml.in\r\n\r\necho \"[\u2713] IceCast 2 installation completed successfully.\"\r\n",
+            "script": "#!\/bin\/ash\r\n# Shoutcast Installer for Pelican\r\n\r\necho \"[*] Updating system and installing required packages...\"\r\napk update\r\napk add --no-cache wget curl unzip zip tar\r\n\r\necho \"[*] Switching to server directory...\"\r\ncd \/mnt\/server\r\nmkdir -p sc\r\n\r\necho \"[*] Downloading latest Shoutcast server...\"\r\nwget \"http:\/\/download.nullsoft.com\/shoutcast\/tools\/sc_serv2_linux_x64-latest.tar.gz\"\r\n\r\necho \"[*] Extracting Shoutcast archive...\"\r\ntar -xzf sc_serv2_linux_x64-latest.tar.gz\r\n\r\necho \"[*] Downloading default configuration file...\"\r\nwget \"https:\/\/raw.githubusercontent.com\/Legacy-DEV-Team\/Pelican-Eggs\/main\/ServerFiles\/shoutcast\/sc_serv_simple.conf\"\r\n\r\necho \"[*] Cleaning up installation files...\"\r\nrm -f sc_serv2_linux_x64-latest.tar.gz\r\n\r\necho \"[\u2713] Shoutcast installation complete.\"\r\n",
             "container": "ghcr.io\/pelican-eggs\/installers:debian",
-            "entrypoint": "bash"
+            "entrypoint": "2"
         }
     },
     "variables": [
         {
-            "sort": 6,
-            "name": "Admin Email",
-            "description": "Contact Email",
-            "env_variable": "ADMIN_EMAIL",
-            "default_value": "icemaster@localhost",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "string",
-                "max:64"
-            ]
-        },
-        {
             "sort": 3,
             "name": "Admin Password",
-            "description": "Icecast Admin Password",
+            "description": "Password used for accessing the administation pages",
             "env_variable": "ADMIN_PASSWORD",
-            "default_value": "",
+            "default_value": "changethisline",
             "user_viewable": true,
             "user_editable": true,
             "rules": [
@@ -61,88 +47,59 @@
         },
         {
             "sort": 2,
-            "name": "Admin Username",
-            "description": "Icecast Admin Username",
-            "env_variable": "ADMIN_USERNAME",
-            "default_value": "admin",
+            "name": "Password",
+            "description": "Password used by sc_trans or the Winamp dsp plug-in, NOTE: remember to change this to something else",
+            "env_variable": "PASSWORD",
+            "default_value": "testing",
             "user_viewable": true,
             "user_editable": true,
             "rules": [
                 "required",
                 "string",
-                "max:32"
-            ]
-        },
-        {
-            "sort": 8,
-            "name": "Hostname",
-            "description": "Public stream hostname or IP",
-            "env_variable": "HOSTNAME_IP",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "string",
-                "max:32"
-            ]
-        },
-        {
-            "sort": 7,
-            "name": "Location",
-            "description": "Display location",
-            "env_variable": "LOCATION",
-            "default_value": "Earth",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "string",
-                "max:16"
-            ]
-        },
-        {
-            "sort": 5,
-            "name": "Relay Password",
-            "description": "Used for stream relays",
-            "env_variable": "RELAY_PASSWORD",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "string",
-                "min:10",
-                "max:32"
-            ]
-        },
-        {
-            "sort": 4,
-            "name": "Source Password",
-            "description": "Used by Source Clients to connect and stream",
-            "env_variable": "SOURCE_PASSWORD",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "string",
-                "min:10",
+                "min:8",
                 "max:32"
             ]
         },
         {
             "sort": 1,
-            "name": "Version",
-            "description": "Example: 2.4.4-1",
-            "env_variable": "VERSION",
-            "default_value": "2.4.4-1",
+            "name": "Portbase",
+            "description": "If you're wanting to use a different port to use for any connections then you can use this option e.g. to use 80 otherwise port 8000 is used as the default to listen on.",
+            "env_variable": "PORTBASE",
+            "default_value": "80",
             "user_viewable": true,
             "user_editable": true,
             "rules": [
                 "required",
                 "string",
-                "max:20"
+                "between:1024,65535"
+            ]
+        },
+        {
+            "sort": 4,
+            "name": "Stream ID",
+            "description": "Now we will specify the details of the stream we're going to serve which can be done as follows",
+            "env_variable": "STREAM_ID",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "between:1,10"
+            ]
+        },
+        {
+            "sort": 5,
+            "name": "Stream Path",
+            "description": "Now we will specify the details of the stream we're going to serve which can be done as follows",
+            "env_variable": "STREAM_PATH",
+            "default_value": "\/test.aac",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:32"
             ]
         }
     ]

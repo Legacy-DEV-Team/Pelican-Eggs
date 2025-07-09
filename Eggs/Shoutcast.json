@@ -1,35 +1,106 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PELICAN PANEL",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
-        "update_url": null
+        "version": "PLCN_v1",
+        "update_url": "https:\/\/raw.githubusercontent.com\/Legacy-DEV-Team\/Pelican-Eggs\/refs\/heads\/main\/Eggs\/Shoutcast.json"
     },
-    "exported_at": "2025-07-09T00:00:00Z",
-    "name": "Shoutcast Server (x64)",
-    "author": "legacyangel2k9@icloud.com",
+    "exported_at": "2025-07-09T08:59:34+00:00",
+    "name": "ShoutCast",
+    "author": "ldt@legacyh.dev",
+    "uuid": "dd2b7e7c-550b-4490-87d9-cdd679a39273",
     "description": "Shoutcast server for broadcasting media streams. Easy to deploy and use for online radio stations using Pelican Panel.",
-    "features": null,
+    "tags": [],
+    "features": [],
     "docker_images": {
-        "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
+        "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/yolks:debian"
     },
     "file_denylist": [],
-    "startup": "./sc_serv sc_serv_simple.conf",
+    "startup": ".\/sc_serv sc_serv_simple.conf",
     "config": {
         "files": "{}",
-        "startup": {
-            "done": "*********************************************************************"
-        },
-        "logs": {
-            "custom": false
-        },
+        "startup": "{\n            \"done\": \"*********************************************************************\"\n}",
+        "logs": "{\n            \"custom\": false\n}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
-            "script": "#!/bin/ash\n# Shoutcast Installer for Pelican\n\napk update\napk add wget curl unzip zip tar\n\ncd /mnt/server\nmkdir -p sc\n\n# Download latest Shoutcast release\necho \"Downloading Shoutcast server...\"\nwget \"http://download.nullsoft.com/shoutcast/tools/sc_serv2_linux_x64-latest.tar.gz\"\n\n# Extract files\necho \"Extracting Shoutcast archive...\"\ntar -xzf sc_serv2_linux_x64-latest.tar.gz\n\n# Download config file\nwget \"https://raw.githubusercontent.com/Legacy-DEV-Team/Pelican-Eggs/main/ServerFiles/shoutcast/sc_serv_simple.conf\"\n\n# Cleanup\nrm sc_serv2_linux_x64-latest.tar.gz\n\necho \"Shoutcast installation complete.\"",
-            "container": "ghcr.io/pterodactyl/installers:alpine",
-            "entrypoint": "ash"
+            "script": "#!\/bin\/ash\r\n# Shoutcast Installer for Pelican\r\n\r\necho \"[*] Updating system and installing required packages...\"\r\napk update\r\napk add --no-cache wget curl unzip zip tar\r\n\r\necho \"[*] Switching to server directory...\"\r\ncd \/mnt\/server\r\nmkdir -p sc\r\n\r\necho \"[*] Downloading latest Shoutcast server...\"\r\nwget \"http:\/\/download.nullsoft.com\/shoutcast\/tools\/sc_serv2_linux_x64-latest.tar.gz\"\r\n\r\necho \"[*] Extracting Shoutcast archive...\"\r\ntar -xzf sc_serv2_linux_x64-latest.tar.gz\r\n\r\necho \"[*] Downloading default configuration file...\"\r\nwget \"https:\/\/raw.githubusercontent.com\/Legacy-DEV-Team\/Pelican-Eggs\/main\/ServerFiles\/shoutcast\/sc_serv_simple.conf\"\r\n\r\necho \"[*] Cleaning up installation files...\"\r\nrm -f sc_serv2_linux_x64-latest.tar.gz\r\n\r\necho \"[\u2713] Shoutcast installation complete.\"\r\n",
+            "container": "ghcr.io\/pelican-eggs\/installers:debian",
+            "entrypoint": "1"
         }
     },
-    "variables": []
+    "variables": [
+        {
+            "sort": 3,
+            "name": "Admin Password",
+            "description": "Password used for accessing the administation pages",
+            "env_variable": "ADMIN_PASSWORD",
+            "default_value": "changethisline",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "min:8",
+                "max:32"
+            ]
+        },
+        {
+            "sort": 2,
+            "name": "Password",
+            "description": "Password used by sc_trans or the Winamp dsp plug-in, NOTE: remember to change this to something else",
+            "env_variable": "PASSWORD",
+            "default_value": "testing",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "min:8",
+                "max:32"
+            ]
+        },
+        {
+            "sort": 1,
+            "name": "Portbase",
+            "description": "If you're wanting to use a different port to use for any connections then you can use this option e.g. to use 80 otherwise port 8000 is used as the default to listen on.",
+            "env_variable": "PORTBASE",
+            "default_value": "80",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "between:1024,65535"
+            ]
+        },
+        {
+            "sort": 4,
+            "name": "Stream ID",
+            "description": "Now we will specify the details of the stream we're going to serve which can be done as follows",
+            "env_variable": "STREAM_ID",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "between:1,10"
+            ]
+        },
+        {
+            "sort": 5,
+            "name": "Stream Path",
+            "description": "Now we will specify the details of the stream we're going to serve which can be done as follows",
+            "env_variable": "STREAM_PATH",
+            "default_value": "\/test.aac",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:32"
+            ]
+        }
+    ]
 }
