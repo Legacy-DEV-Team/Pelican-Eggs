@@ -1,116 +1,149 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PELICAN PANEL",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
-        "update_url": null
+        "version": "PLCN_v1",
+        "update_url": "https:\/\/raw.githubusercontent.com\/Legacy-DEV-Team\/Pelican-Eggs\/main\/Eggs\/IceCast.json"
     },
-    "exported_at": "2025-07-09T00:00:00Z",
-    "name": "IceCast 2 (ARM64)",
-    "author": "legacyangel2k9@icloud.com",
+    "exported_at": "2025-07-09T08:30:44+00:00",
+    "name": "IceCast 2",
+    "author": "ldt@legacyh.dev",
+    "uuid": "d26182e4-2476-411c-891f-0866bfb11a4f",
     "description": "Icecast is a streaming media server that supports Ogg, Opus, WebM and MP3. Ideal for running internet radio or personal audio streaming.",
-    "features": null,
+    "tags": [],
+    "features": [],
     "docker_images": {
-        "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
+        "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/yolks:debian"
     },
     "file_denylist": [],
-    "startup": "./icecast2 -c icecast.xml",
+    "startup": ".\/icecast2 -c icecast.xml",
     "config": {
-        "files": "{}",
-        "startup": {
-            "done": "icecast2"
-        },
-        "logs": {
-            "custom": false
-        },
+        "files": "{\n}",
+        "startup": "{\n            \"done\": \"icecast2\"\n}",
+        "logs": "{\n            \"custom\": false\n}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
-            "script": "#!/bin/ash\n# IceCast 2 Installer for Pelican\n\napk update\napk add curl binutils tar xz\n\nmkdir -p /mnt/server/tmp\ncd /mnt/server/tmp\n\nDOWNLOAD_URL=\"https://download.opensuse.org/repositories/multimedia:/xiph/Debian_10/amd64/icecast2_${VERSION}_amd64.deb\"\n\nif [ -n \"$DOWNLOAD_URL\" ]; then\n  if curl --output /dev/null --silent --head --fail \"$DOWNLOAD_URL\"; then\n    echo \"Download link is valid: $DOWNLOAD_URL\"\n  else\n    echo \"Invalid download link. Exiting.\"\n    exit 1\n  fi\nfi\n\ncurl -sSL -o icecast2.deb \"$DOWNLOAD_URL\"\nar xv icecast2.deb\nrm -rf icecast2.deb control.tar.xz debian-binary\ntar xvf data.tar.xz\nrm -rf data.tar.xz\n\nmv usr/bin/icecast2 /mnt/server\nmv etc/icecast2/* /mnt/server\ncd /mnt/server\nmkdir -p log/\nrm -rf tmp/ icecast.xml\n\ncurl -sSL -o icecast.xml https://pteropaste.com/7vqi8k\n\necho \"IceCast 2 installation completed.\"",
-            "container": "ghcr.io/pterodactyl/installers:alpine",
-            "entrypoint": "ash"
+            "script": "#!\/bin\/ash\r\n# IceCast 2 Installer for Pelican\r\n\r\necho \"[*] Updating packages and installing dependencies...\"\r\napk update\r\napk add --no-cache curl binutils tar xz\r\n\r\necho \"[*] Preparing temporary workspace...\"\r\nmkdir -p \/mnt\/server\/tmp\r\ncd \/mnt\/server\/tmp\r\n\r\n# Define download URL based on user-supplied version\r\nDOWNLOAD_URL=\"https:\/\/download.opensuse.org\/repositories\/multimedia:\/xiph\/Debian_10\/amd64\/icecast2_${VERSION}_amd64.deb\"\r\n\r\necho \"[*] Checking if download link is valid...\"\r\nif [ -n \"$DOWNLOAD_URL\" ]; then\r\n    if curl --output \/dev\/null --silent --head --fail \"$DOWNLOAD_URL\"; then\r\n        echo \"[\u2713] Download link is valid: $DOWNLOAD_URL\"\r\n    else\r\n        echo \"[\u2717] Invalid download link. Exiting.\"\r\n        exit 1\r\n    fi\r\nfi\r\n\r\necho \"[*] Downloading IceCast 2 .deb package...\"\r\ncurl -sSL -o icecast2.deb \"$DOWNLOAD_URL\"\r\n\r\necho \"[*] Extracting package contents...\"\r\nar xv icecast2.deb\r\nrm -f icecast2.deb control.tar.xz debian-binary\r\ntar xvf data.tar.xz\r\nrm -f data.tar.xz\r\n\r\necho \"[*] Moving server files to \/mnt\/server...\"\r\nmv usr\/bin\/icecast2 \/mnt\/server\r\nmv etc\/icecast2\/* \/mnt\/server\r\n\r\ncd \/mnt\/server\r\nmkdir -p log\/\r\nrm -rf tmp\/ icecast.xml\r\n\r\necho \"[*] Downloading default configuration file...\"\r\ncurl -sSL -o icecast.xml https:\/\/gitlab.xiph.org\/xiph\/icecast-server\/-\/raw\/master\/conf\/icecast_minimal.xml.in\r\n\r\necho \"[\u2713] IceCast 2 installation completed successfully.\"\r\n",
+            "container": "ghcr.io\/pelican-eggs\/installers:debian",
+            "entrypoint": "bash"
         }
     },
     "variables": [
         {
-            "name": "Version",
-            "description": "Example: 2.4.4-1",
-            "env_variable": "VERSION",
-            "default_value": "2.4.4-1",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|max:20",
-            "field_type": "text"
-        },
-        {
-            "name": "Admin Username",
-            "description": "Icecast Admin Username",
-            "env_variable": "ADMIN_USERNAME",
-            "default_value": "admin",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|max:32",
-            "field_type": "text"
-        },
-        {
-            "name": "Admin Password",
-            "description": "Icecast Admin Password",
-            "env_variable": "ADMIN_PASSWORD",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|min:8|max:32",
-            "field_type": "text"
-        },
-        {
-            "name": "Source Password",
-            "description": "Used by Source Clients to connect and stream",
-            "env_variable": "SOURCE_PASSWORD",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|min:10|max:32",
-            "field_type": "text"
-        },
-        {
-            "name": "Relay Password",
-            "description": "Used for stream relays",
-            "env_variable": "RELAY_PASSWORD",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|min:10|max:32",
-            "field_type": "text"
-        },
-        {
+            "sort": 6,
             "name": "Admin Email",
             "description": "Contact Email",
             "env_variable": "ADMIN_EMAIL",
             "default_value": "icemaster@localhost",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:64",
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:64"
+            ]
         },
         {
+            "sort": 3,
+            "name": "Admin Password",
+            "description": "Icecast Admin Password",
+            "env_variable": "ADMIN_PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "min:8",
+                "max:32"
+            ]
+        },
+        {
+            "sort": 2,
+            "name": "Admin Username",
+            "description": "Icecast Admin Username",
+            "env_variable": "ADMIN_USERNAME",
+            "default_value": "admin",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:32"
+            ]
+        },
+        {
+            "sort": 8,
+            "name": "Hostname",
+            "description": "Public stream hostname or IP",
+            "env_variable": "HOSTNAME_IP",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:32"
+            ]
+        },
+        {
+            "sort": 7,
             "name": "Location",
             "description": "Display location",
             "env_variable": "LOCATION",
             "default_value": "Earth",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:16",
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:16"
+            ]
         },
         {
-            "name": "Hostname",
-            "description": "Public stream hostname or IP",
-            "env_variable": "HOSTNAME",
+            "sort": 5,
+            "name": "Relay Password",
+            "description": "Used for stream relays",
+            "env_variable": "RELAY_PASSWORD",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:32",
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "min:10",
+                "max:32"
+            ]
+        },
+        {
+            "sort": 4,
+            "name": "Source Password",
+            "description": "Used by Source Clients to connect and stream",
+            "env_variable": "SOURCE_PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "min:10",
+                "max:32"
+            ]
+        },
+        {
+            "sort": 1,
+            "name": "Version",
+            "description": "Example: 2.4.4-1",
+            "env_variable": "VERSION",
+            "default_value": "2.4.4-1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ]
         }
     ]
 }
